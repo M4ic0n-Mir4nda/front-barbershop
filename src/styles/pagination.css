@@ -1,0 +1,46 @@
+/* pagination.css */
+
+h1,
+p {
+  font-family: 'Lato', sans-serif;
+}
+
+.pagination-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 16px 0; /* Adicionando algum espaço ao redor */
+}
+
+.pagination-item {
+    display: flex;
+    list-style: none;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #ddd; /* Adicionando bordas */
+    margin: 0 4px; /* Espaçamento entre os itens */
+    border-radius: 4px; /* Bordas arredondadas */
+    transition: background-color 0.3s; /* Efeito de transição suave */
+    height: 30%;
+    align-items: center;
+    justify-content: center
+}
+
+.pagination-item:hover {
+  background-color: #f0f0f0; /* Efeito ao passar o mouse */
+}
+
+.pagination-item.selected {
+  background-color: #1976d2; /* Cor de fundo do item selecionado */
+  color: white; /* Cor do texto do item selecionado */
+}
+
+.pagination-item.disabled {
+  cursor: not-allowed; /* Cursor desativado para itens desativados */
+  opacity: 0.5; /* Reduzindo a opacidade */
+}
+
+.dots {
+  padding: 8px;
+  color: #1976d2; /* Cor dos pontos */
+}
