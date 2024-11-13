@@ -20,8 +20,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from "axios";
 import ScrollToTop from "../../components/ScrollToTop";
 import Cookies from "js-cookie";
+import config from "../../config.js";
 
-const BACKEND_URL = process.env.REACT_APP_API_URL;
+// const BACKEND_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = config.BACKEND_URL;
 const BACKEND_PAIRING_URL = process.env.REACT_APP_API_WHATSAPP;
 
 function CreateAccount() {
