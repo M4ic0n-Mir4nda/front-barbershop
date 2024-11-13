@@ -334,7 +334,7 @@ function Schedules() {
               sx={{
                 width: "170px",
                 color: "white",
-                height: "40px",
+                height: isMobile ? "55px" : "40px",
                 backgroundColor: "black",
                 fontWeight: "bold",
                 borderRadius: "27px",

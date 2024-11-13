@@ -833,12 +833,15 @@ function CreateAccount() {
                 flexDirection: "column",
                 alignItems: "center",
                 borderRadius: "5px",
+                maxHeight: "95vh", // Define uma altura máxima em relação à altura da viewport
+                overflowY: "auto", // Adiciona rolagem vertical se o conteúdo exceder a altura
               }}
             >
               <Typography
                 sx={{
-                  marginBottom: "30px",
+                  marginBottom: isMobile ? "0" : "30px",
                   textAlign: "center",
+                  lineHeight: isMobile ? "1" : "1.5",
                 }}
               >
                 Nosso sistema permite integrar o Whatsapp com facilidade: você
@@ -856,7 +859,12 @@ function CreateAccount() {
                   width: "100%",
                 }}
               >
-                <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
+                <Box
+                  sx={{
+                    marginTop: "20px",
+                    marginBottom: isMobile ? "0" : "20px",
+                  }}
+                >
                   <FormControl
                     fullWidth
                     variant="outlined"
@@ -924,7 +932,7 @@ function CreateAccount() {
                 sx={{
                   fontSize: "0.8em",
                   fontWeight: "bold",
-                  marginBottom: "20px",
+                  marginBottom: isMobile ? "0" : "20px",
                   textAlign: "center",
                 }}
               >
