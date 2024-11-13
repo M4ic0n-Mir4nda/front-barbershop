@@ -38,6 +38,9 @@ jobs:
       run: yarn test --watchAll false --passWithNoTests
 
     - name: Build frontend
+      env:
+        REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+        PORT: ${{ secrets.PORT }}
       run: yarn build  # Garante que a pasta build seja criada dentro de frontend
 
     - name: Upload filed to bucket
