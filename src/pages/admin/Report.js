@@ -715,6 +715,7 @@ function Report() {
           </Box>
         </Box>
 
+        {/* Modal */}
         <Modal
           open={open}
           onClose={handleClose}
@@ -726,7 +727,7 @@ function Report() {
               display: "flex",
               justifyContent: "center",
               alignContent: "center",
-              width: "90%",
+              width: isMobile ? "80%" : "90%",
               backgroundColor: "white",
               position: "absolute",
               top: "50%",
@@ -844,9 +845,10 @@ function Report() {
             sx={{
               display: "flex",
               justifyContent: "left",
-              width: "100%",
-              padding: "10px",
-              margin: "0 auto",
+              width: "90%",
+              paddingTop: "10px",
+              paddingBottom: "10px",
+              paddingLeft: "5px",
             }}
           >
             <Button
