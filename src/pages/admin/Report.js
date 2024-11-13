@@ -46,6 +46,7 @@ import Pagination from "../../components/Pagination.js";
 import ScrollToTop from "../../components/ScrollToTop.js";
 import Cookies from "js-cookie";
 import { useSnackbar } from "notistack";
+import config from "../../config.js";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -67,7 +68,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const BACKEND_URL = process.env.REACT_APP_API_URL;
+// const BACKEND_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = config.BACKEND_URL;
 let PageSize;
 
 function Report() {

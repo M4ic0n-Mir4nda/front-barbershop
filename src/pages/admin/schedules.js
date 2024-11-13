@@ -22,8 +22,10 @@ import Loading from "../site/Loading";
 import Pagination from "../../components/Pagination.js";
 import ScrollToTop from "../../components/ScrollToTop.js";
 import Cookies from "js-cookie";
+import config from "../../config.js";
 
-const BACKEND_URL = process.env.REACT_APP_API_URL;
+// const BACKEND_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = config.BACKEND_URL;
 
 let PageSize = 5;
 

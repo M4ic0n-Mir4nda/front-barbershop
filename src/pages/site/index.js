@@ -26,8 +26,10 @@ import { useSnackbar } from "notistack";
 import Loading from "./Loading.js";
 import LoadingComponent from "../../components/LoadingComponent.js";
 import ScrollToTop from "../../components/ScrollToTop.js";
+import config from "../../config.js";
 
-const BACKEND_URL = process.env.REACT_APP_API_URL;
+// const BACKEND_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = config.BACKEND_URL;
 
 function Site() {
   const { enqueueSnackbar } = useSnackbar();

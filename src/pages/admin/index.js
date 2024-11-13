@@ -17,9 +17,11 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Cookies from "js-cookie";
 import ScrollToTop from "../../components/ScrollToTop";
+import config from "../../config";
 
 // Continuar com a parte de segurança / Login
-const BACKEND_URL = process.env.REACT_APP_API_URL;
+// const BACKEND_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = config.BACKEND_URL;
 
 function Login() {
   const navigate = useNavigate();

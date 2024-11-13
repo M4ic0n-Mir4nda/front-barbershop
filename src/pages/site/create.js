@@ -433,6 +433,7 @@ function CreateAccount() {
       }
       console.error(err);
     } finally {
+      console.log("URL: ", BACKEND_URL);
       setIsDisabled(false);
     }
   };
