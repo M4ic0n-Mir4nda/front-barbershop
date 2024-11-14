@@ -24,7 +24,7 @@ import config from "../../config.js";
 
 // const BACKEND_URL = process.env.REACT_APP_API_URL;
 const BACKEND_URL = config.BACKEND_URL;
-const BACKEND_PAIRING_URL = process.env.REACT_APP_API_WHATSAPP;
+const BACKEND_PAIRING_URL = config.API_WHATSAPP;
 
 function CreateAccount() {
   const [email, setEmail] = useState("");
