@@ -324,8 +324,12 @@ function Site() {
         justifyContent="center"
         alignItems="center"
         flexDirection="column"
-        mt="20px"
         padding="10px"
+        sx={{
+          marginTop: isMobile ? "10px" : "30px",
+          maxHeight: isMobile ? "15vh" : "", // Define uma altura máxima em relação à altura da viewport
+          overflowY: isMobile ? "auto" : "", // Adiciona rolagem vertical se o conteúdo exceder a altura
+        }}
       >
         {avaliableTimes.map((datetime) => {
           const formattedTime = dayjs(datetime).format("HH:mm");
@@ -525,8 +529,9 @@ function Site() {
         <Box
           sx={{
             backgroundColor: "#FFFAF0",
-            width: isMobile ? "90%" : "470px" && returnHours ? "33%" : "470px",
-            paddingBottom: "50px",
+            width: isMobile ? "90%" : "470px" && returnHours ? "auto" : "470px",
+            maxWidth: "610px",
+            paddingBottom: isMobile ? "30px" : "50px",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -538,7 +543,10 @@ function Site() {
           }}
         >
           <Typography
-            sx={{ fontSize: isMobile ? "25px" : "30px", marginTop: "50px" }}
+            sx={{
+              fontSize: isMobile ? "25px" : "30px",
+              marginTop: isMobile ? "30px" : "50px",
+            }}
           >
             Agende um Horário
           </Typography>
@@ -655,7 +663,12 @@ function Site() {
           {schedulingData.modalStep == 2 && (
             <>
               <Typography
-                sx={{ fontSize: "16px", marginY: "10px", textAlign: "center" }}
+                sx={{
+                  fontSize: "16px",
+                  marginY: "10px",
+                  textAlign: "center",
+                  width: "90%",
+                }}
               >
                 Serviços selecionados:{" "}
                 {schedulingData?.activities?.map((service) => {
@@ -665,11 +678,7 @@ function Site() {
                   return <Chip label={serviceName} />;
                 })}
               </Typography>
-              <Box
-                display={isMobile ? "block" : "flex"}
-                gap="10px"
-                marginTop="0"
-              >
+              <Box display={isMobile ? "block" : "flex"} marginTop="0">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar
                     value={
@@ -682,6 +691,9 @@ function Site() {
                       })
                     }
                     shouldDisableDate={unavailableDates}
+                    sx={{
+                      height: isMobile ? "250px" : "336px",
+                    }}
                   />
                 </LocalizationProvider>
 

@@ -6,6 +6,8 @@ import {
   TextField,
   FormHelperText,
   Link,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import imgCover from "../../images/cover.png";
 import LogoAdm from "../../images/logo.png";
@@ -18,6 +20,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Cookies from "js-cookie";
 import ScrollToTop from "../../components/ScrollToTop";
 import config from "../../config";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 // Continuar com a parte de segurança / Login
 // const BACKEND_URL = process.env.REACT_APP_API_URL;
@@ -29,6 +33,7 @@ function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [responseError, setResponseError] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -41,6 +46,10 @@ function Login() {
     password: "",
   });
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleLogin = async () => {
     setResponseError(false);
@@ -152,50 +161,90 @@ function Login() {
           Olá, acesse seu painel
         </Typography>
 
-        <FormControl variant="outlined" error={Boolean(error.name)}>
-          <TextField
-            onChange={(newValue) => setName(newValue.target.value)}
-            label="Nome do Salão"
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <FormControl
             variant="outlined"
-            sx={{
-              width: isMobile ? "100%" : "670px",
-              height: "67px",
-            }}
-            disabled={isDisabled}
-          />
-          {error.name && <FormHelperText>{error.name}</FormHelperText>}
-        </FormControl>
+            error={Boolean(error.name)}
+            sx={{ width: isMobile ? "90%" : "auto" }}
+          >
+            <TextField
+              onChange={(newValue) => setName(newValue.target.value)}
+              label="Nome do Salão"
+              variant="outlined"
+              sx={{
+                width: isMobile ? "100%" : "670px",
+                height: "67px",
+              }}
+              disabled={isDisabled}
+            />
+            {error.name && <FormHelperText>{error.name}</FormHelperText>}
+          </FormControl>
 
-        <FormControl variant="outlined" error={Boolean(error.email)}>
-          <TextField
-            onChange={(newValue) => setEmail(newValue.target.value)}
-            label="Email"
+          <FormControl
             variant="outlined"
-            sx={{
-              width: isMobile ? "100%" : "670px",
-              height: "67px",
-              marginTop: "20px",
-            }}
-            disabled={isDisabled}
-          />
-          {error.email && <FormHelperText>{error.email}</FormHelperText>}
-        </FormControl>
+            error={Boolean(error.email)}
+            sx={{ width: isMobile ? "90%" : "auto" }}
+          >
+            <TextField
+              onChange={(newValue) => setEmail(newValue.target.value)}
+              label="Email"
+              variant="outlined"
+              sx={{
+                width: isMobile ? "100%" : "670px",
+                height: "67px",
+                marginTop: "20px",
+              }}
+              disabled={isDisabled}
+            />
+            {error.email && <FormHelperText>{error.email}</FormHelperText>}
+          </FormControl>
 
-        <FormControl variant="outlined" error={Boolean(error.password)}>
-          <TextField
-            onChange={(newValue) => setPassword(newValue.target.value)}
-            label="Senha"
-            type="password"
+          <FormControl
             variant="outlined"
-            sx={{
-              width: isMobile ? "100%" : "670px",
-              height: "67px",
-              marginTop: "20px",
-            }}
-            disabled={isDisabled}
-          />
-          {error.password && <FormHelperText>{error.password}</FormHelperText>}
-        </FormControl>
+            error={Boolean(error.password)}
+            sx={{ width: isMobile ? "90%" : "auto" }}
+          >
+            <TextField
+              onChange={(newValue) => setPassword(newValue.target.value)}
+              label="Senha"
+              type={showPassword ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={
+                        showPassword
+                          ? "hide the password"
+                          : "display the password"
+                      }
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              sx={{
+                width: isMobile ? "100%" : "670px",
+                height: "67px",
+                marginTop: "20px",
+              }}
+              disabled={isDisabled}
+            />
+            {error.password && (
+              <FormHelperText>{error.password}</FormHelperText>
+            )}
+          </FormControl>
+        </Box>
 
         {responseError ? (
           <>

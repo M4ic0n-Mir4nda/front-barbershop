@@ -9,6 +9,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import imgCover from "../../images/cover.png";
 import LogoAdm from "../../images/logo.png";
@@ -21,10 +23,12 @@ import axios from "axios";
 import ScrollToTop from "../../components/ScrollToTop";
 import Cookies from "js-cookie";
 import config from "../../config.js";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 // const BACKEND_URL = process.env.REACT_APP_API_URL;
 const BACKEND_URL = config.BACKEND_URL;
-const BACKEND_PAIRING_URL = process.env.REACT_APP_API_WHATSAPP;
+const BACKEND_PAIRING_URL = config.API_WHATSAPP;
 
 function CreateAccount() {
   const [email, setEmail] = useState("");
@@ -43,6 +47,7 @@ function CreateAccount() {
 
   const [isDisabled, setIsDisabled] = useState(false);
   const [statusBindWhatsapp, setStatusBindWhatsapp] = useState("Vincular");
+  const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false);
   const [disableButtonBind, setDisableButtonBind] = useState(false);
   const [code, setCode] = useState(null);
@@ -65,6 +70,10 @@ function CreateAccount() {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Verifica se a tela é mobile
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -265,7 +274,6 @@ function CreateAccount() {
               return;
             }
             setCode(response.data.code);
-            console.log(response.data);
             count++;
           } else {
             setCode(null);
@@ -483,10 +491,12 @@ function CreateAccount() {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "white",
-            width: isMobile ? "90%" : "40%",
+            width: isMobile ? "90%" : "auto",
             border: "1px solid black",
             marginTop: "30px",
             marginBottom: "30px",
+            paddingLeft: isMobile ? "0" : "60px",
+            paddingRight: isMobile ? "0" : "60px",
           }}
         >
           <Box>
@@ -515,7 +525,11 @@ function CreateAccount() {
               gap: "100px",
             }}
           >
-            <Box>
+            <Box
+              sx={{
+                padding: "10px",
+              }}
+            >
               {/* Campo Email */}
               <Box sx={{ marginTop: "20px" }}>
                 <FormControl
@@ -547,12 +561,29 @@ function CreateAccount() {
                 >
                   <TextField
                     label="Senha"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     variant="outlined"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     inputProps={{ maxLength: 50 }}
                     disabled={isDisabled}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label={
+                              showPassword
+                                ? "hide the password"
+                                : "display the password"
+                            }
+                            onClick={handleClickShowPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </FormControl>
               </Box>
@@ -666,6 +697,7 @@ function CreateAccount() {
               sx={{
                 borderTop: isMobile ? "1px solid black" : "",
                 marginTop: isMobile ? "20px" : "",
+                padding: "10px",
               }}
             >
               {/* Campo CEP */}
