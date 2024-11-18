@@ -430,7 +430,9 @@ function CreateAccount() {
         uf,
       });
       const { token, name_establishment } = response.data;
-      Cookies.set("token", `${token}`);
+      const experationTime = new Date();
+      experationTime.setHours(experationTime.getHours + 23);
+      Cookies.set("token", `${token}`, { expires: experationTime, path: "/" });
       navigate(`/${name_establishment}/admin/schedules`);
     } catch (err) {
       if (
