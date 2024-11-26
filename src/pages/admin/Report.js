@@ -346,7 +346,7 @@ function Report() {
                       </>
                     )}
                     <StyledTableCell align="right">
-                      R$ {formatCurrency(scheduling.accumulatedTotal)}
+                      {formatCurrency(scheduling.accumulatedTotal)}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))
