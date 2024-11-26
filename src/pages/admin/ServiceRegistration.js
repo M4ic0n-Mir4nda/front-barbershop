@@ -110,7 +110,7 @@ function ServiceRegistration() {
     setIdItem(service.id);
     setNameService(service.name_service);
     setTimeService(service.time_service);
-    setPrice(service.price);
+    setPrice(formatCurrency(service.price));
     setDescription(service.description);
   };
 
