@@ -180,7 +180,35 @@ function Report() {
     }
   };
 
-  const sumPrice = (listReport) => {
+  const sumPrice = (price) => {
+    return parseFloat(price).toFixed(2).replace(".", ",");
+  };
+
+  const formatCurrency = (value) => {
+    // Remove caracteres não numéricos e formata como moeda
+    try {
+      let formattedValue;
+      if (isNaN(value)) {
+        const numericValue = value.replace(/\D/g, "");
+        formattedValue = new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(parseFloat(numericValue) / 100); // Divide por 100 para considerar centavos
+      } else {
+        formattedValue = new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(parseFloat(value)); // Divide por 100 para considerar centavos
+      }
+
+      return formattedValue;
+    } catch (err) {
+      console.log(err);
+      return "R$ 0,00";
+    }
+  };
+
+  const sumValueTotal = (listReport) => {
     let sum = 0;
     listReport.map((schedule) => {
       sum += schedule.accumulatedTotal;
@@ -318,7 +346,7 @@ function Report() {
                       </>
                     )}
                     <StyledTableCell align="right">
-                      R$ {parseFloat(scheduling.accumulatedTotal).toFixed(2)}
+                      R$ {formatCurrency(scheduling.accumulatedTotal)}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))
@@ -369,7 +397,7 @@ function Report() {
                 fontWeight: "bold",
               }}
             >
-              R$ {sumPrice(reports)}
+              R$ {sumValueTotal(reports)}
             </Typography>
           </Box>
         </Box>

@@ -26,9 +26,7 @@ function EmployeeRegistration() {
       //   window.location.assign("/admin");
       // }
       axios
-        .get(
-          `${BACKEND_URL}/employe/${currentName}/employes`
-        )
+        .get(`${BACKEND_URL}/employe/${currentName}/employes`)
         .then((response) => {
           setShopData(response.data);
           setLoading(false);
@@ -36,7 +34,7 @@ function EmployeeRegistration() {
     }
   }, []);
 
-  console.log(shopData)
+  console.log(shopData);
 
   return (
     <>
@@ -72,9 +70,11 @@ function EmployeeRegistration() {
                     marginTop: "50px",
                   }}
                 >
-                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
                     <Typography sx={{ fontSize: "22px", fontWeight: "bold" }}>
-                    {employee.name}
+                      {employee.name}
                     </Typography>
                     <Typography sx={{ fontSize: "22px" }}>
                       {employee.whatsapp}
@@ -84,7 +84,9 @@ function EmployeeRegistration() {
               );
             })
           ) : (
-            <Typography sx={{ fontSize: "20px", marginTop: "40px", fontWeight: 'bold' }}>
+            <Typography
+              sx={{ fontSize: "20px", marginTop: "40px", fontWeight: "bold" }}
+            >
               Não há barbeiros cadastrados...
             </Typography>
           )}
