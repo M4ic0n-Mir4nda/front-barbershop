@@ -419,6 +419,7 @@ function ServiceRegistration() {
           sx={{
             fontSize: "20px",
             fontWeight: "bold",
+            textAlign: "center",
           }}
         >
           Não há nenhum serviço cadastrado...
@@ -507,21 +508,23 @@ function ServiceRegistration() {
                 Serviços cadastrados
               </Typography>
             </Box>
-            <Box
-              sx={{
-                marginTop: "30px",
-                paddingBottom: "10px",
-              }}
-            >
-              <Fab
-                color="primary"
-                aria-label="add"
-                onClick={handleAdd}
-                size="medium"
+            {services.length && (
+              <Box
+                sx={{
+                  marginTop: "30px",
+                  paddingBottom: "10px",
+                }}
               >
-                <AddIcon />
-              </Fab>
-            </Box>
+                <Fab
+                  color="primary"
+                  aria-label="add"
+                  onClick={handleAdd}
+                  size="medium"
+                >
+                  <AddIcon />
+                </Fab>
+              </Box>
+            )}
           </Box>
           <Box
             sx={{
