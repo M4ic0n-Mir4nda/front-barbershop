@@ -49,7 +49,7 @@ npm install
 npm start
 ```
 
-### A aplicação será iniciada em http://localhost:3005.
+### Após iniciada acesse a rota http://localhost:3005/login
 
 ## 🌐 Integração com a API
 
