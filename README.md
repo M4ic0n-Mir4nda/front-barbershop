@@ -27,6 +27,13 @@ Este repositório contém a interface web da plataforma **Barbershop**, desenvol
 | **React Scroll**      | Rolagem suave entre seções                        |
 | **Testing Library**   | Testes unitários e de integração                  |
 
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
+```env
+REACT_APP_API_URL=http://localhost:8080
+PORT=3005
+```
+
 ## 📦 Instalação
 
 Certifique-se de ter o **Node.js** instalado. Em seguida:
@@ -41,7 +48,7 @@ npm install
 npm start
 ```
 
-### A aplicação será iniciada em http://localhost:3000.
+### A aplicação será iniciada em http://localhost:3005.
 
 ## 🌐 Integração com a API
 
