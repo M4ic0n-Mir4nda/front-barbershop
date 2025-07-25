@@ -29,8 +29,8 @@ function SideBar() {
     { text: "Agendamentos", path: `/${currentName}/admin/schedules` },
     { text: "Relatório", path: `/${currentName}/admin/report` },
     { text: "Serviços", path: `/${currentName}/admin/services` },
+    { text: "Barbeiros", path: `/${currentName}/admin/barbers` },
     { text: "Site", path: `/site/${currentName}` },
-    // { text: 'Barbeiros', path: '/admin/barbers' },
     // { text: 'Dados', path: '/admin/data' },
     // { text: 'Fale com o suporte', path: '/admin/support' }
   ];

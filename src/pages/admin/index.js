@@ -59,13 +59,13 @@ function Login() {
       password: "",
     });
 
-    if (name === "") {
-      setError((prev) => ({
-        ...prev,
-        name: "O nome precisa ser preenchido!",
-      }));
-      return;
-    }
+    // if (name === "") {
+    //   setError((prev) => ({
+    //     ...prev,
+    //     name: "O nome precisa ser preenchido!",
+    //   }));
+    //   return;
+    // }
 
     if (!email.includes("@")) {
       setError((prev) => ({ ...prev, email: "Email inválido" }));
@@ -170,7 +170,7 @@ function Login() {
             alignItems: "center",
           }}
         >
-          <FormControl
+          {/* <FormControl
             variant="outlined"
             error={Boolean(error.name)}
             sx={{ width: isMobile ? "90%" : "auto" }}
@@ -186,7 +186,7 @@ function Login() {
               disabled={isDisabled}
             />
             {error.name && <FormHelperText>{error.name}</FormHelperText>}
-          </FormControl>
+          </FormControl> */}
 
           <FormControl
             variant="outlined"

@@ -505,10 +505,10 @@ function ServiceRegistration() {
                   width: isMobile ? "30%" : "100%",
                 }}
               >
-                Serviços cadastrados
+                Serviços
               </Typography>
             </Box>
-            {services.length && (
+            {services.length ? (
               <Box
                 sx={{
                   marginTop: "30px",
@@ -524,6 +524,8 @@ function ServiceRegistration() {
                   <AddIcon />
                 </Fab>
               </Box>
+            ) : (
+              <></>
             )}
           </Box>
           <Box
