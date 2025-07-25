@@ -31,6 +31,7 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
 ```env
 REACT_APP_API_URL=http://localhost:8080
+REACT_APP_API_WHATSAPP=http://localhost:3010
 PORT=3005
 ```
 
