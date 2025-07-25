@@ -25,17 +25,12 @@ import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import imgCover from "../../images/cover.png";
 import Divisor from "../../images/divisor.png";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import Loading from "../site/Loading.js";
 import LogoImage from "../../components/Logo.js";
 import LoadingComponent from "../../components/LoadingComponent.js";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import SideBar from "../../components/sideBar.js";
 import { styled } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
@@ -47,6 +42,12 @@ import ScrollToTop from "../../components/ScrollToTop.js";
 import Cookies from "js-cookie";
 import { useSnackbar } from "notistack";
 import config from "../../config.js";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -178,10 +179,6 @@ function Report() {
 
       return `${dateFormatted} ${dateSplit[1]}`;
     }
-  };
-
-  const sumPrice = (price) => {
-    return parseFloat(price).toFixed(2).replace(".", ",");
   };
 
   const formatCurrency = (value) => {

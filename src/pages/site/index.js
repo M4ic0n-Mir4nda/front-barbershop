@@ -27,6 +27,18 @@ import Loading from "./Loading.js";
 import LoadingComponent from "../../components/LoadingComponent.js";
 import ScrollToTop from "../../components/ScrollToTop.js";
 import config from "../../config.js";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
+import {
+  formatDateConsulting,
+  currentDateFull,
+  currentDateMonth,
+} from "../../functions/formatDate.js";
+import { formatCleanCpf, formatInputCPF } from "../../functions/formatCpf.js";
+import {
+  formatCleanPhone,
+  formatInputPhone,
+} from "../../functions/formatPhone.js";
 
 // const BACKEND_URL = process.env.REACT_APP_API_URL;
 const BACKEND_URL = config.BACKEND_URL;
@@ -42,6 +54,9 @@ function Site() {
   const [customer, setCustomer] = useState({});
   const [shopData, setShopData] = useState([]);
   const [schedulingData, setSchedulingData] = useState({ modalStep: 1 });
+  const [loadingComponent, setLoadingComponent] = useState(false);
+  const [avaliableTimes, setAvaliableTimes] = useState(false);
+  const [currentDate, setCurrentDate] = useState(dayjs(currentDateMonth()));
 
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
@@ -72,26 +87,6 @@ function Site() {
     return originalName.replace(/,/g, " ");
   };
 
-  const currentDate = () => {
-    var date = new Date();
-    const dateFull = date
-      .toLocaleDateString("pt-BR")
-      .split("/")
-      .reverse()
-      .join("-");
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
-
-    if (hours < 10) hours = "0" + hours;
-
-    if (minutes < 10) minutes = "0" + minutes;
-
-    if (seconds < 10) seconds = "0" + seconds;
-
-    return `${dateFull}T${hours}:${minutes}:${seconds}`;
-  };
-
   const unavailableDates = (date) => {
     let dateCalender = new Date();
 
@@ -108,45 +103,6 @@ function Site() {
     );
   };
 
-  const formatCleanCpf = (value) => {
-    return value.replace(/[-.]/g, "");
-  };
-
-  const formatCleanPhone = (value) => {
-    return value.replace(/[()-]/g, "");
-  };
-
-  // Formatar campos de cliente
-  const formatInputCPF = (value) => {
-    if (!value.replace(/\D/g, "")) {
-      return "";
-    }
-
-    const cleaned = value.replace(/\D/g, ""); // Remove caracteres não numéricos
-    const match = cleaned.match(/(\d{3})(\d{3})(\d{3})(\d{2})/);
-
-    if (match) {
-      return `${match[1]}.${match[2]}.${match[3]}-${match[4]}`;
-    }
-
-    return value;
-  };
-
-  const formatInputPhone = (value) => {
-    if (!value.replace(/\D/g, "")) {
-      return "";
-    }
-
-    const cleaned = value.replace(/\D/g, ""); // Remove caracteres não numéricos
-    const match = cleaned.match(/(\d{2})(\d{5})(\d{4})/);
-
-    if (match) {
-      return `(${match[1]})${match[2]}-${match[3]}`;
-    }
-
-    return value;
-  };
-
   const handleChangeCpf = (e) => {
     const formattedCpf = formatInputCPF(e.target.value);
     setCpf(formattedCpf);
@@ -156,24 +112,23 @@ function Site() {
     const formattedPhone = formatInputPhone(e.target.value);
     setPhone(formattedPhone);
   };
-  //
 
-  const HandleSearchCustomer = () => {
+  const handleSearchCustomer = async () => {
     const cpfClean = formatCleanCpf(cpf);
-    axios
-      .get(`${BACKEND_URL}/customer/${currentName}/client?cpf=${cpfClean}`)
-      .then((response) => {
-        setCustomer(response.data);
-        setName(response.data.name);
-        setPhone(formatInputPhone(response.data.whatsapp));
-        // setInputDisable(true);
-      })
-      .catch(() => {
-        setName("");
-        setPhone("");
-        // setInputDisable(true);
-        return;
-      });
+
+    try {
+      const res = await axios.get(
+        `${BACKEND_URL}/customer/${currentName}/client?cpf=${cpfClean}`
+      );
+      setCustomer(res.data);
+      setName(res.data.name);
+      setPhone(formatInputPhone(res.data.whatsapp));
+    } catch (e) {
+      setCustomer({});
+      setName("");
+      setPhone("");
+      return;
+    }
   };
 
   // Responsividade
@@ -188,6 +143,8 @@ function Site() {
     setName("");
     setPhone("");
     setOpen(false);
+    setCurrentDate(dayjs(currentDateMonth()));
+    setAvaliableTimes([]);
   };
 
   const handleModalClick = () => {
@@ -221,8 +178,8 @@ function Site() {
             whatsapp: formatCleanPhone(phone),
           },
           date_scheduling: `${schedulingData.date}T${schedulingData.time}`,
-          starts_at: currentDate(),
-          ends_at: currentDate(),
+          starts_at: currentDateFull(),
+          ends_at: currentDateFull(),
           status: 1,
         })
         .then((response) => {
@@ -245,125 +202,66 @@ function Site() {
   };
 
   useEffect(() => {
-    async function fetchApi() {
-      setLoadingPage(true);
+    if ((shopData.length <= 0 && loadingPage) || loadingPage) {
+      async function fetchApi() {
+        try {
+          const response = await axios.get(
+            `${BACKEND_URL}/establishment/${currentName}`
+          );
+          const data = response.data;
+          setShopData(data);
+        } catch (err) {
+          navigate("/site/page");
+          console.error("Error fetching API: ", err);
+        } finally {
+          setLoadingPage(false);
+        }
+      }
 
+      fetchApi();
+    }
+
+    if (currentDate) {
+      consultAvaliableHours(currentDate);
+    }
+  }, [currentName, navigate, currentDate]);
+
+  const consultAvaliableHours = async (selectedDate) => {
+    setLoadingComponent(true);
+    setAvaliableTimes([]);
+
+    if (schedulingData?.activities?.length <= 0) {
+      setTimeout(() => setLoadingComponent(false), 500);
+      return;
+    }
+
+    if (selectedDate) {
       try {
-        const response = await axios.get(
-          `${BACKEND_URL}/establishment/${currentName}`
+        if (!schedulingData.employe) {
+          setLoadingComponent(false);
+          return;
+        }
+
+        const res = await axios.post(
+          `${BACKEND_URL}/scheduling/${currentName}/period?employe_id=${schedulingData.employe.id}`,
+          {
+            date: formatDateConsulting(selectedDate),
+            activities: schedulingData.activities,
+          }
         );
-        const data = response.data;
-        setShopData(data);
+
+        setSchedulingData({
+          ...schedulingData,
+          date: formatDateConsulting(selectedDate),
+        });
+
+        setAvaliableTimes(res.data);
       } catch (err) {
-        navigate("/site/page");
-        console.error("Error fetching API: ", err);
+        console.error(err);
       } finally {
-        setLoadingPage(false);
+        setLoadingComponent(false);
       }
     }
-
-    fetchApi();
-  }, [currentName, navigate]);
-
-  const ConsultAvaliableHours = ({
-    currentDbName,
-    schedulingData,
-    setSchedulingData,
-  }) => {
-    const [avaliableTimes, setAvaliableTimes] = useState([]);
-    const [loadingComponent, setLoadingComponent] = useState(true);
-
-    useEffect(() => {
-      const fetchAvaliableTimes = async () => {
-        if (schedulingData.date) {
-          setTimeout(() => setLoadingComponent(false), 2500);
-          try {
-            const res = await axios.post(
-              `${BACKEND_URL}/scheduling/${currentDbName}/period`,
-              {
-                date: schedulingData.date,
-                activities: schedulingData.activities,
-              }
-            );
-
-            setAvaliableTimes(res.data);
-          } catch (err) {
-            console.error(err);
-          }
-        }
-      };
-
-      fetchAvaliableTimes(); // Chamar a função dentro do useEffect sempre que schedulingData.date mudar
-    }, [schedulingData.date, currentDbName]); // Executar o useEffect sempre que a data ou currentName mudarem
-
-    if (!avaliableTimes.length) {
-      return null; // Retorna null enquanto não há horários disponíveis
-    }
-
-    setReturnHours(true);
-
-    if (loadingComponent) {
-      return (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          mt="20px"
-          padding="10px"
-        >
-          <LoadingComponent title={""} message={""} />
-        </Box>
-      );
-    }
-
-    return (
-      <Box
-        display="grid"
-        gridTemplateColumns="repeat(3, auto)"
-        gap="5px"
-        justifyContent="center"
-        alignItems="center"
-        flexDirection="column"
-        padding="10px"
-        sx={{
-          marginTop: isMobile ? "10px" : "30px",
-          maxHeight: isMobile ? "15vh" : "", // Define uma altura máxima em relação à altura da viewport
-          overflowY: isMobile ? "auto" : "", // Adiciona rolagem vertical se o conteúdo exceder a altura
-        }}
-      >
-        {avaliableTimes.map((datetime) => {
-          const formattedTime = dayjs(datetime).format("HH:mm");
-
-          return (
-            <Chip
-              key={datetime}
-              label={formattedTime}
-              variant="outlined"
-              sx={{
-                marginBottom: "6px",
-                width: "80px",
-                cursor: "pointer",
-                backgroundColor:
-                  schedulingData.time === formattedTime
-                    ? "#35312D!important"
-                    : "",
-                color:
-                  schedulingData.time === formattedTime
-                    ? "white!important"
-                    : "",
-                "&:hover": {
-                  backgroundColor: "#35312D!important",
-                  color: "white",
-                },
-              }}
-              onClick={() =>
-                setSchedulingData({ ...schedulingData, time: formattedTime })
-              }
-            />
-          );
-        })}
-      </Box>
-    );
   };
 
   const isScheduleButtonDisable = () => {
@@ -529,9 +427,9 @@ function Site() {
         <Box
           sx={{
             backgroundColor: "#FFFAF0",
-            width: isMobile ? "90%" : "470px" && returnHours ? "auto" : "470px",
+            width: isMobile ? "90%" : "470px" && returnHours ? "auto" : "580px",
             maxWidth: "610px",
-            paddingBottom: isMobile ? "30px" : "50px",
+            paddingBottom: "30px",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -540,12 +438,43 @@ function Site() {
             justifyContent: "center",
             flexDirection: "column",
             alignItems: "center",
+            maxHeight: "85vh", // Define uma altura máxima em relação à altura da viewport
+            overflowY: "auto", // Adiciona rolagem vertical se o conteúdo exceder a altura
           }}
         >
+          {schedulingData.modalStep === 2 ? (
+            <Box
+              sx={{
+                width: "100%",
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "left", // Alinha o botão à esquerda
+              }}
+            >
+              <Button
+                sx={{
+                  padding: "5px",
+                  minWidth: "0",
+                  marginLeft: "10px",
+                  borderRadius: "50%",
+                }}
+                onClick={() =>
+                  setSchedulingData({
+                    ...schedulingData,
+                    modalStep: 1,
+                  })
+                }
+              >
+                <ArrowBackIcon sx={{ padding: "5px", fontSize: "1.5em" }} />
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
           <Typography
             sx={{
               fontSize: isMobile ? "25px" : "30px",
-              marginTop: isMobile ? "30px" : "50px",
+              marginTop: schedulingData.modalStep === 2 ? "0" : "60px",
             }}
           >
             Agende um Horário
@@ -566,14 +495,16 @@ function Site() {
                   <Select
                     multiple
                     value={schedulingData.activities || []}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      setCurrentDate(dayjs(currentDate));
                       setSchedulingData({
                         ...schedulingData,
                         activities: e.target.value,
-                      })
-                    }
+                      });
+                    }}
                   >
                     {shopData?.activities?.map((service) => {
+                      setSchedulingData;
                       return (
                         <MenuItem key={service.id} value={service}>
                           {service.name_service}
@@ -594,13 +525,16 @@ function Site() {
                 <FormControl variant="standard" sx={{ width: "70%" }}>
                   <InputLabel>Escolha um barbeiro:</InputLabel>
                   <Select
-                    value={schedulingData.employe || []}
-                    onChange={(e) =>
+                    value={schedulingData.employe || ""}
+                    onChange={(e) => {
+                      if (schedulingData?.activities?.length > 0) {
+                        setCurrentDate(dayjs(currentDate));
+                      }
                       setSchedulingData({
                         ...schedulingData,
                         employe: e.target.value,
-                      })
-                    }
+                      });
+                    }}
                   >
                     {shopData?.employes?.map((employe) => {
                       return (
@@ -625,7 +559,7 @@ function Site() {
                   marginTop: "20px",
                 }}
                 onChange={handleChangeCpf}
-                onBlur={HandleSearchCustomer}
+                onBlur={handleSearchCustomer}
               />
 
               <TextField
@@ -678,18 +612,17 @@ function Site() {
                   return <Chip label={serviceName} />;
                 })}
               </Typography>
-              <Box display={isMobile ? "block" : "flex"} marginTop="0">
+              <Box marginTop="0">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar
-                    value={
-                      schedulingData.date ? dayjs(schedulingData.date) : null
-                    }
-                    onChange={(newValue) =>
-                      setSchedulingData({
-                        ...schedulingData,
-                        date: newValue.format("YYYY-MM-DD"),
-                      })
-                    }
+                    format="DD/MM/YYYY"
+                    locale="pt-br"
+                    value={currentDate}
+                    onChange={(newValue) => {
+                      setCurrentDate(newValue);
+                      consultAvaliableHours(newValue);
+                      schedulingData.time = "";
+                    }}
                     shouldDisableDate={unavailableDates}
                     sx={{
                       height: isMobile ? "250px" : "336px",
@@ -697,11 +630,72 @@ function Site() {
                   />
                 </LocalizationProvider>
 
-                <ConsultAvaliableHours
-                  currentDbName={currentName}
-                  schedulingData={schedulingData}
-                  setSchedulingData={setSchedulingData}
-                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    // marginTop: "20px",
+                  }}
+                >
+                  {loadingComponent ? (
+                    <LoadingComponent title={""} message={""} />
+                  ) : (
+                    <></>
+                  )}
+                  {avaliableTimes.length > 0 ? (
+                    <Box
+                      display="grid"
+                      gridTemplateColumns="repeat(3, auto)"
+                      gap="2px"
+                      justifyContent="center"
+                      alignItems="center"
+                      flexDirection="column"
+                      sx={{
+                        marginTop: isMobile ? "5px" : "10px",
+                        maxHeight: "18vh", // Define uma altura máxima em relação à altura da viewport
+                        overflowY: "auto", // Adiciona rolagem vertical se o conteúdo exceder a altura
+                      }}
+                    >
+                      {avaliableTimes.map((datetime) => {
+                        const formattedTime = dayjs(datetime).format("HH:mm");
+
+                        return (
+                          <Chip
+                            key={datetime}
+                            label={formattedTime}
+                            variant="outlined"
+                            sx={{
+                              marginBottom: "6px",
+                              width: "80px",
+                              cursor: "pointer",
+                              backgroundColor:
+                                schedulingData.time === formattedTime
+                                  ? "#35312D!important"
+                                  : "",
+                              color:
+                                schedulingData.time === formattedTime
+                                  ? "white!important"
+                                  : "",
+                              "&:hover": {
+                                backgroundColor: "#35312D!important",
+                                color: "white",
+                              },
+                            }}
+                            onClick={() =>
+                              setSchedulingData({
+                                ...schedulingData,
+                                time: formattedTime,
+                              })
+                            }
+                          />
+                        );
+                      })}
+                    </Box>
+                  ) : (
+                    <></>
+                  )}
+                </Box>
               </Box>
             </>
           )}
@@ -861,7 +855,8 @@ function Site() {
               }}
             >
               {shopData.address?.public_place}, {shopData.address?.neighborhood}
-              , {shopData.address?.city} - {shopData.address?.uf}
+              , {shopData.address?.city} - {shopData.address?.uf} |{" "}
+              {shopData.address?.cep}
             </Typography>
 
             <Typography
@@ -878,7 +873,7 @@ function Site() {
                 fontFamily: "Marcellus",
               }}
             >
-              {shopData.whatsapp}
+              {formatInputPhone(shopData.whatsapp)}
             </Typography>
           </Box>
 
@@ -912,7 +907,7 @@ function Site() {
         <Typography
           sx={{ fontSize: isMobile ? "15px" : "20px", fontFamily: "Marcellus" }}
         >
-          © 2024 BarberShop. Todos os direitos reservados.
+          © 2024 BarberEasy. Todos os direitos reservados.
         </Typography>
       </Box>
       <ScrollToTop />

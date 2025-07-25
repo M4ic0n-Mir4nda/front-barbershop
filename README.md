@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# 💇‍♂️ Barbershop - Front-end
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este repositório contém a interface web da plataforma **Barbershop**, desenvolvida em **React 18** com foco em responsividade, fluidez e uma experiência de usuário intuitiva tanto para clientes quanto para os administradores da barbearia.
 
-## Available Scripts
+## 🚀 Funcionalidades
 
-In the project directory, you can run:
+- Interface pública acessível via link exclusivo da barbearia
+- Visualização de serviços, valores e localização
+- Formulário completo para agendamento de serviços
+- Confirmação visual do agendamento
+- Login e área administrativa integrada com a API
+- Navegação fluída com React Router
 
-### `npm start`
+## 🧰 Tecnologias Utilizadas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Biblioteca/Framework  | Finalidade                                        |
+| --------------------- | ------------------------------------------------- |
+| **React 18**          | Biblioteca principal para construção da interface |
+| **React Router DOM**  | Gerenciamento de rotas e navegação entre páginas  |
+| **MUI (Material UI)** | Componentes visuais modernos e responsivos        |
+| **Emotion**           | Estilização com CSS-in-JS                         |
+| **Axios**             | Comunicação com a API back-end                    |
+| **Dayjs**             | Manipulação de datas e horários                   |
+| **JS-Cookie**         | Armazenamento de tokens e dados em cookies        |
+| **Notistack**         | Sistema de notificações fluídas e empilháveis     |
+| **Dotenv**            | Uso de variáveis de ambiente no front-end         |
+| **React Scroll**      | Rolagem suave entre seções                        |
+| **Testing Library**   | Testes unitários e de integração                  |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📦 Instalação
 
-### `npm test`
+Certifique-se de ter o **Node.js** instalado. Em seguida:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+```
 
-### `npm run build`
+## ▶️ Execução
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### A aplicação será iniciada em http://localhost:3000.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🌐 Integração com a API
 
-### `npm run eject`
+### A aplicação se comunica com a API do Barbershop (Spring Boot) utilizando requisições HTTP via axios. Certifique-se de que a API esteja rodando localmente em http://localhost:8080 ou configure o endpoint via .env.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 💡 Diferenciais
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Design responsivo com MUI
+- Navegação clara entre páginas e formulários
+- Integração completa com autenticação JWT
+- Agendamento de serviços fácil e intuitivo
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🙋‍♂️ Autor
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Desenvolvido por [Maicon Miranda](https://github.com/M4ic0n-Mir4nda).
